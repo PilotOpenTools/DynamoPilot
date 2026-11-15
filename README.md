@@ -34,9 +34,7 @@
 
 - `ProtoGeometry.dll`, `LibG.Interface.dll` — управляемая часть геометрической библиотеки Dynamo; на `ProtoGeometry.dll` статически ссылается Dynamo Core, а `ProtoGeometry.dll` ссылается на `LibG.Interface.dll`, поэтому убирать их нельзя.
 - `Analytics.NET.Core.dll`, `Analytics.NET.Google.dll`, `Analytics.Net.ADP.dll`, `AdpSDKCSharpWrapper.dll` — клиенты аналитики; на них ссылается Dynamo Core (напрямую или через `Analytics.Net.ADP.dll`), без них он не стартует.
-- `UI/Fonts/Autodesk/Artifakt-*.otf` — шрифты интерфейса Dynamo. По `License.rtf` (раздел об Artifakt) это проприетарные шрифты Autodesk, и их лицензия уже, чем у остальных файлов.
-
-Эти файлы остаются в поставке, чтобы установка не требовала интернета и отдельной установки Dynamo. Нативное ядро геометрии (`libg_*`) в поставку не входит: в поставке нет ядра ASM, поэтому на чистой установке узлы геометрии Dynamo (Point, Line и т. п.) не работают.
+Эти файлы остаются в поставке, чтобы установка не требовала интернета и отдельной установки Dynamo. Проприетарные шрифты Artifakt из поставки убраны: в `lib/DynamoCoreRuntime2.16.4/UI/Themes/Modern/DynamoModern.xaml` вместо них подставлен Open Sans (Apache 2.0), который уже входит в `UI/Fonts`. Нативное ядро геометрии (`libg_*`) в поставку не входит: в поставке нет ядра ASM, поэтому на чистой установке узлы геометрии Dynamo (Point, Line и т. п.) не работают.
 
 ## Лицензия
 
