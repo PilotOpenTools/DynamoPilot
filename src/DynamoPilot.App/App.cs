@@ -120,9 +120,14 @@ namespace DynamoPilot.App
                 PathResolver = new PilotPathResolver(_pluginDir),
                 DynamoCorePath = _pluginDir,
                 DynamoHostPath = Assembly.GetExecutingAssembly().Location,
-                GeometryFactoryPath = Path.Combine(_pluginDir, "libg_228_0_0"),
                 Context = "Pilot " + Assembly.GetExecutingAssembly().GetName().Version,
             };
+
+            // Нативное ядро геометрии (libg) больше не входит в поставку: без ядра ASM оно не работало.
+            // Путь задаём только если папка осталась от прежней установки, чтобы её поведение не менялось.
+            var libgDir = Path.Combine(_pluginDir, "libg_228_0_0");
+            if (Directory.Exists(libgDir))
+                cfg.GeometryFactoryPath = libgDir;
 
             _model = DynamoModel.Start(cfg);
             ApplyManualRunSettings(_model.CurrentWorkspace);
