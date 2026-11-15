@@ -1,0 +1,61 @@
+# Релиз по тегу-версии (как у прошлых релизов: 1.0.0.8).
+#   1. Поднять AssemblyVersion в src/DynamoPilot.App/DynamoPilot.App.csproj и закоммитить.
+#   2. git tag -a 1.0.0.9 -m "- что изменилось"   (текст тега станет описанием релиза;
+#      у легковесного тега берется сообщение коммита)
+#   3. git push origin 1.0.0.9
+# Релиз содержит DynamoPilot.App.zip (под этим именем его ищет PilotLauncher) и SHA256SUMS.txt.
+# Тестов здесь нет: узлам нужен живой клиент Pilot. Подробнее: docs/releasing.md.
+name: Release
+
+on:
+  push:
+    tags: ['[0-9]+.[0-9]+.[0-9]+.[0-9]+']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Тег совпадает с AssemblyVersion
+        shell: pwsh
+        run: |
+          $version = (Select-Xml -Path src/DynamoPilot.App/DynamoPilot.App.csproj -XPath '//AssemblyVersion').Node.InnerText
+          if ($version -ne $env:GITHUB_REF_NAME) {
+            throw "Тег $env:GITHUB_REF_NAME не совпадает с AssemblyVersion $version в src/DynamoPilot.App/DynamoPilot.App.csproj"
+          }
+
+      # Release-сборка решения и второй проход, который создаёт DynamoPilot.App.zip (см. build/Build-Release.ps1)
+      - name: Сборка
+        shell: pwsh
+        run: ./build/Build-Release.ps1
+
+      - name: Проверка архива
+        shell: pwsh
+        run: ./build/Test-ReleaseArchive.ps1 -Path src/DynamoPilot.App/bin/Release/net481/DynamoPilot.App.zip -Version $env:GITHUB_REF_NAME
+
+      - name: Контрольные суммы
+        shell: pwsh
+        working-directory: src/DynamoPilot.App/bin/Release/net481
+        run: |
+          $hash = (Get-FileHash DynamoPilot.App.zip -Algorithm SHA256).Hash.ToLowerInvariant()
+          [IO.File]::WriteAllText("$PWD/SHA256SUMS.txt", "$hash  DynamoPilot.App.zip`n")
+          Get-Content SHA256SUMS.txt
+
+      # checkout кладет тег как легковесный (на коммит) - без этого --notes-from-tag
+      # берет сообщение коммита вместо текста аннотированного тега
+      - name: Публикация
+        shell: pwsh
+        working-directory: src/DynamoPilot.App/bin/Release/net481
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git fetch --force --no-tags origin "+refs/tags/${env:GITHUB_REF_NAME}:refs/tags/${env:GITHUB_REF_NAME}"
+          gh release create "$env:GITHUB_REF_NAME" DynamoPilot.App.zip SHA256SUMS.txt --title "DynamoPilot $env:GITHUB_REF_NAME" --notes-from-tag
