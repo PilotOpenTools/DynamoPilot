@@ -40,6 +40,10 @@
 
 Проект распространяется по лицензии [Apache 2.0](LICENSE). Это не относится к компонентам Dynamo и сторонним библиотекам в `lib`: они распространяются по своим лицензиям (см. «Сторонние компоненты»).
 
+## Разработка и выпуск версий
+
+Состав решения, сборка и отладка в клиенте: [docs/development.md](docs/development.md). Порядок выпуска версии и проверка релизного архива: [docs/releasing.md](docs/releasing.md).
+
 ## Участие
 
 Issues и PR приветствуются. Перед отправкой PR убедитесь, что проект собирается в конфигурациях Debug и Release, а релизный архив формируется корректно. Подробнее — в [руководстве для участников](https://github.com/PilotOpenTools/.github/blob/main/CONTRIBUTING.md) и [Кодексе поведения](https://github.com/PilotOpenTools/.github/blob/main/CODE_OF_CONDUCT.md).
