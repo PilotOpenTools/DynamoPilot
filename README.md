@@ -1,3 +1,5 @@
+<p align="center"><img src="docs/images/banner.png" alt="DynamoPilot" width="720"></p>
+
 ## DynamoPilot
 
 Интеграция Dynamo в Pilot с набором узлов (nodes) для работы с объектами Pilot. Проект поставляется с локальным ядром Dynamo и пакетами узлов, что позволяет запускать модуль без отдельной установки Dynamo пользователем.
