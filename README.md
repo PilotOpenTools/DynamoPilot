@@ -9,7 +9,7 @@
 
 ## Примеры
 
-С примерами работы Dynamo с Pilot можно ознакомиться в [Samples](https://github.com/mahach666/DynamoPilot/tree/master/Samples).
+С примерами работы Dynamo с Pilot можно ознакомиться в [Samples](https://github.com/PilotOpenTools/DynamoPilot/tree/master/Samples).
 
 ## Установка
 
