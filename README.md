@@ -17,6 +17,8 @@
 
 ***Для загрузки на сервер:*** "СЕРВИС>Модули расширения>Создать...>Расширение" в появившемся окне выберите DynamoPilot.App.zip и нажмите открыть.
 
+Установка не требует доступа в интернет: все компоненты входят в DynamoPilot.App.zip.
+
 ## Скриншоты
 
 <img width="2503" height="1238" alt="image" src="https://github.com/user-attachments/assets/73c4d175-3a94-407b-a908-12ab0b7905a0" />
@@ -26,9 +28,17 @@
 
 Проект тестировался в Pilot-ICE Enterprise 25.14. О всех ошибках сообщайте в Issues.
 
+## Сторонние компоненты
+
+Папка `lib/DynamoCoreRuntime2.16.4` содержит копию Dynamo Core 2.16.4 (Apache 2.0, Autodesk; её лицензия лежит рядом, в `License.rtf`). Часть файлов этой копии закрытая: Autodesk распространяет её по собственному лицензионному соглашению, а не по Apache 2.0.
+
+- `ProtoGeometry.dll`, `LibG.Interface.dll` — управляемая часть геометрической библиотеки Dynamo; на `ProtoGeometry.dll` статически ссылается Dynamo Core, а `ProtoGeometry.dll` ссылается на `LibG.Interface.dll`, поэтому убирать их нельзя.
+- `Analytics.NET.Core.dll`, `Analytics.NET.Google.dll`, `Analytics.Net.ADP.dll`, `AdpSDKCSharpWrapper.dll` — клиенты аналитики; на них ссылается Dynamo Core (напрямую или через `Analytics.Net.ADP.dll`), без них он не стартует.
+Эти файлы остаются в поставке, чтобы установка не требовала интернета и отдельной установки Dynamo. Проприетарные шрифты Artifakt из поставки убраны: в `lib/DynamoCoreRuntime2.16.4/UI/Themes/Modern/DynamoModern.xaml` вместо них подставлен Open Sans (Apache 2.0), который уже входит в `UI/Fonts`. Нативное ядро геометрии (`libg_*`) в поставку не входит: в поставке нет ядра ASM, поэтому на чистой установке узлы геометрии Dynamo (Point, Line и т. п.) не работают.
+
 ## Лицензия
 
-Проект распространяется по лицензии [Apache 2.0](LICENSE).
+Проект распространяется по лицензии [Apache 2.0](LICENSE). Это не относится к компонентам Dynamo и сторонним библиотекам в `lib`: они распространяются по своим лицензиям (см. «Сторонние компоненты»).
 
 ## Участие
 
